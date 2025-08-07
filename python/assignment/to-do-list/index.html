@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .task-container {
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-container.completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        button {
+            border: none;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff3333;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .add-task {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .add-task button {
+            background-color: #4CAF50;
+        }
+
+        .add-task button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h2>My To-Do List</h2>
+        </header>
+
+        <div class="add-task">
+            <input type="text" id="newTask" placeholder="Enter a new task">
+            <button onclick="addTask()">Add</button>
+        </div>
+
+        <div id="todoList"></div>
+    </div>
+
+    <script>
+        let tasks = [];
+
+        function addTask() {
+            const taskInput = document.getElementById("newTask");
+            const taskText = taskInput.value.trim();
+
+            if (taskText === "") {
+                alert("Task cannot be empty!");
+                return;
+            }
+
+            const taskId = tasks.length + 1;
+            tasks.push({ id: taskId, text: taskText, completed: false });
+
+            taskInput.value = "";
+            renderTasks();
+        }
+
+        function removeTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            renderTasks();
+        }
+
+        function toggleTaskCompletion(id) {
+            const task = tasks.find(task => task.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                renderTasks();
+            }
+        }
+
+        function renderTasks() {
+            const todoList = document.getElementById("todoList");
+            todoList.innerHTML = "";
+
+            tasks.forEach(task => {
+                const taskElement = document.createElement("div");
+                taskElement.className = `task-container ${task.completed ? "completed" : ""}`;
+                taskElement.innerHTML = `
+                    <span>${task.text}</span>
+                    <div>
+                        <button onclick="toggleTaskCompletion(${task.id})">
+                            ${task.completed ? "Undo" : "Complete"}
+                        </button>
+                        <button onclick="removeTask(${task.id})">Remove</button>
+                    </div>
+                `;
+                todoList.appendChild(taskElement);
+            });
+        }
+    </script>
+</body>
+</html>

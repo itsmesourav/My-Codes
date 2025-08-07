@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .calculator {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .display {
+            font-size: 24px;
+            text-align: right;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-height: 30px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .operator {
+            background-color: #ff9500;
+        }
+
+        .operator:hover {
+            background-color: #ffac33;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
+            
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="appendOperator('-')">-</button>
+
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="operator" onclick="appendOperator('*')">×</button>
+
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="clearDisplay()">C</button>
+            <button class="operator" onclick="appendOperator('%')">%</button>
+            <button class="operator" onclick="appendOperator('/')">÷</button>
+
+            <button class="operator" style="grid-column: span 4" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = "";
+        let operator = "";
+        let firstOperand = "";
+        let secondOperand = "";
+        let display = document.getElementById("display");
+
+        function appendNumber(num) {
+            if (operator === "") {
+                firstOperand += num;
+                display.innerText = firstOperand;
+            } else {
+                secondOperand += num;
+                display.innerText = secondOperand;
+            }
+        }
+
+        function appendOperator(op) {
+            if (firstOperand !== "") {
+                operator = op;
+                display.innerText = operator;
+            }
+        }
+
+        function clearDisplay() {
+            firstOperand = "";
+            secondOperand = "";
+            operator = "";
+            display.innerText = "0";
+        }
+
+        function calculate() {
+            let result = 0;
+            let a = parseFloat(firstOperand);
+            let b = parseFloat(secondOperand);
+
+            if (isNaN(a) || isNaN(b)) {
+                display.innerText = "Error";
+                return;
+            }
+
+            switch (operator) {
+                case "+":
+                    result = a + b;
+                    break;
+                case "-":
+                    result = a - b;
+                    break;
+                case "*":
+                    result = a * b;
+                    break;
+                case "/":
+                    result = b !== 0 ? a / b : "Error";
+                    break;
+                case "%":
+                    result = b !== 0 ? a % b : "Error";
+                    break;
+                default:
+                    result = "Error";
+            }
+
+            display.innerText = result;
+            firstOperand = result.toString();
+            secondOperand = "";
+            operator = "";
+        }
+    </script>
+</body>
+</html>

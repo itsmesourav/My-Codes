@@ -1,0 +1,26 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+import nltk
+from nltk.corpus import wordnet
+
+# Download the WordNet data
+nltk.download('wordnet')
+
+# Initialize the graph
+G = nx.Graph()
+
+# Function to add word and its synonyms to the graph
+def add_word_to_graph(word):
+    synonyms = wordnet.synsets(word)
+    for syn in synonyms:
+        for lemma in syn.lemmas():
+            G.add_edge(word, lemma.name())
+
+# Add words to the graph
+words = ["happy", "joyful", "content"]
+for word in words:
+    add_word_to_graph(word)
+
+# Draw the graph
+nx.draw(G, with_labels=True)
+plt.show()
